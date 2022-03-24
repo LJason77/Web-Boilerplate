@@ -1,0 +1,6 @@
+/.idea
+/target
+.env
+build/deploy.sh
+Cargo.lock
+src/models/*.pem

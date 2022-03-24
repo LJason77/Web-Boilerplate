@@ -1,0 +1,12 @@
+#!/bin/bash
+
+docker build -t web .
+
+# 方法一（推荐）：
+docker save web:latest | xz -9e -T0 | ssh <ip> 'xz -dc | docker load'
+
+# 方法二（手动部署）：
+#rm -rf build/web.tar.xz
+#docker save web:latest | xz -9e -T0 > build/web.tar.xz
+#scp build/web.tar.xz <ip>:
+#ssh <ip> 'xz -dc web.tar.xz | docker load'

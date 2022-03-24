@@ -1,0 +1,38 @@
+[package]
+name = "web-boilerplate"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.59"
+authors = ["LJason <ljason@ljason.cn>"]
+readme = "README.md"
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
+panic = "abort"
+
+[lib]
+name = "web_boilerplate"
+path = "src/lib.rs"
+
+[dependencies]
+bson = "2"
+chrono = "0.4"
+dotenv = "0.15"
+jsonwebtoken = "8"
+
+[dependencies.mongodb]
+version = "2"
+default-features = false
+features = ["tokio-runtime"]
+
+[dependencies.rocket]
+git = "https://github.com/SergioBenitez/Rocket"
+version = "0.5.0-rc.1"
+default-features = false
+features = ["json"]
+
+[dependencies.serde]
+version = "1"
+default-features = false
+features = ["derive"]

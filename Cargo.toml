@@ -2,7 +2,7 @@
 name = "web-boilerplate"
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.59"
+rust-version = "1.60"
 authors = ["LJason <ljason@ljason.cn>"]
 readme = "README.md"
 
@@ -17,20 +17,24 @@ path = "src/lib.rs"
 
 [dependencies]
 bson = "2"
-chrono = "0.4"
 dotenv = "0.15"
 jsonwebtoken = "8"
+
+[dependencies.chrono]
+version = "0.4"
+default-features = false
+features = ["serde"]
 
 [dependencies.mongodb]
 version = "2"
 default-features = false
-features = ["tokio-runtime"]
+features = ["async-std-runtime", "zlib-compression"]
 
 [dependencies.rocket]
 git = "https://github.com/SergioBenitez/Rocket"
-version = "0.5.0-rc.1"
+version = "0.5.0-rc.2"
 default-features = false
-features = ["json"]
+features = ["http2", "json"]
 
 [dependencies.serde]
 version = "1"

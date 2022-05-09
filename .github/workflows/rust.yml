@@ -10,8 +10,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  lints:
-    name: Run cargo clippy
+  build-clippy:
+    name: Run cargo build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -22,22 +22,31 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-          components: clippy
+          components: rustfmt, clippy
       - name: Cache
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - name: Clippy
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+      - name: Run cargo format
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+      - name: Run cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: -q --release --locked
+      - name: Run cargo clippy
         uses: actions-rs/cargo@v1
         with:
           command: clippy
           args: -q --release -- --no-deps
+
   test:
     name: Run cargo test
     runs-on: ubuntu-latest
@@ -50,26 +59,23 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-          components: clippy
       - name: Cache
         uses: actions/cache@v2
         with:
           path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Run test --no-run
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: -q --release --no-run
+          args: -q --no-run
       - name: Run test
         uses: actions-rs/cargo@v1
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
         with:
           command: test
-          args: -q --release -- --nocapture
+          args: -q -- --nocapture

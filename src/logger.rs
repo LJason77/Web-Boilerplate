@@ -11,7 +11,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Logger {
     /// 用户名
-    pub user: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user: Option<String>,
     /// 发起地址
     pub ip: String,
     /// 请求路径
@@ -50,6 +51,7 @@ impl Fairing for Logger {
 
     async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
         let user = request.local_cache(String::new).to_string();
+        let user = if user.is_empty() { None } else { Some(user) };
         let ip = match request.client_ip() {
             None => "未知".to_string(),
             Some(ip) => ip.to_string(),

@@ -39,6 +39,14 @@ docker run -d --name mongo --restart always -e MONGO_INITDB_ROOT_USERNAME=mongo 
 docker run -d --restart always --name web -e MONGO_URL=mongodb://root:root@127.0.0.1:27017/web -p 8080:8080 web
 ```
 
+## 测试 & 性能
+
+需安装 [drill](https://github.com/fcsonline/drill) 。
+
+```shell
+drill -s -q --benchmark benchmark.yml
+```
+
 ## 许可
 
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)

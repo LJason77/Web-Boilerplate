@@ -83,7 +83,10 @@ impl<'r> FromRequest<'r> for Claims {
         };
         let result = Self::decode(encode_token);
         match result {
-            Ok(claims) => Outcome::Success(claims),
+            Ok(claims) => {
+                request.local_cache(|| claims.name.to_string());
+                Outcome::Success(claims)
+            }
             Err(_) => Outcome::Forward(()),
         }
     }

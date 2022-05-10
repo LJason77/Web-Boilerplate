@@ -7,7 +7,7 @@ db.createUser({
 
 db.users.drop();
 db.users.createIndex({"name": 1}, {unique: true, background: true});
-db.users.insertOne({name: 'admin', password: 'c403b04d4617d99596164dbac8319d11'});
+db.users.insertOne({name: 'admin', password: 'admin'});
 
 db.logs.drop();
 db.logs.createIndex({"user": 1}, {background: true});
